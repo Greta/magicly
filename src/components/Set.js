@@ -43,7 +43,7 @@ class Set extends Component {
     return (
       <div>
         <Breadcrumb>
-          <MenuItem><Link to='/'>Magic the Gathering Sets</Link></MenuItem>
+          <Link to='/'>Magic the Gathering Sets</Link>
           <MenuItem>{this.state.set.name}</MenuItem>
         </Breadcrumb>
         <div className='container'>
@@ -61,18 +61,35 @@ class SetCardList extends Component {
     this.state = {
       cards: []
     }
+
+    let cards = [], update, i = 0
     mtg.card.all({ set: props.match.params.code })
       .on('data', card => {
-        var cards = this.state.cards
         cards.push(card)
-        this.setState({ cards })
+        // Let's not re-render 100+ times
+        // Instead, render every 25 cards, or 100ms
+        if (i > 25) {
+          i = 0
+          this.updateCardList(cards)
+          clearTimeout(update)
+          update = setTimeout(this.updateCardList(cards), 100)
+        }
+        i++
       })
+  }
+  updateCardList = (cards) => {
+    this.setState({ cards })
   }
   render() {
     if (!this.state.cards) return <p>Loading</p>
     let props = this.props
     var cardList = _.map(this.state.cards, function(card) {
-      return <CollectionItem key={card.id} onMouseEnter={props.onCardHover.bind(this, card)}>{card.name}</CollectionItem>
+      return (
+        <CollectionItem key={card.id} onMouseEnter={props.onCardHover.bind(this, card)}>
+          {card.name}
+          <img src={card.imageUrl} />
+        </CollectionItem>
+      )
     })
     return (
       <Collection className='cardList'>{cardList}</Collection>
