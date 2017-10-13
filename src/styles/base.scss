@@ -1,0 +1,22 @@
+header {
+  background-color: #222;
+  height: 150px;
+  padding: 20px;
+  color: white;
+  img {
+    animation: App-logo-spin infinite 20s linear;
+    height: 80px;
+  }
+}
+
+@keyframes App-logo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+#currentCard {
+  position: fixed;
+  right: 50px;
+  top: 100px;
+  z-index: 100;
+}
