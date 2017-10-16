@@ -1,11 +1,19 @@
-import React, {Component} from 'react';
+import React from 'react';
 import logo from './logo.svg';
+import {Switch, Route, Link} from 'react-router-dom';
 import {Footer} from 'react-materialize';
+import {Breadcrumb} from 'react-materialize';
 import Main from './components/Main.js';
 
 const App = () => (
   <div>
     <Header />
+    <Breadcrumb>
+      <Link to='/'>Magic the Gathering Sets</Link>
+      <Switch>
+        <Route path='/set/:code' render={(props) => (<a className="breadcrumb">{props.match.params.code}</a>)} />
+      </Switch>
+    </Breadcrumb>
     <Main />
     <Footer copyrights="&copy; 2015 Copyright Text"
       moreLinks={

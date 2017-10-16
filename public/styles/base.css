@@ -19,5 +19,10 @@ header {
   top: 100px;
   z-index: 100; }
 
+.container .set-list, .container .card-list {
+  display: inline-block;
+  width: 50%;
+  vertical-align: top; }
+
 .collection-item img {
   display: none; }

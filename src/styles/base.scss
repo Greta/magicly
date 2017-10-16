@@ -21,6 +21,14 @@ header {
   z-index: 100;
 }
 
+.container {
+  .set-list, .card-list {
+    display: inline-block;
+    width: 50%;
+    vertical-align: top;
+  }
+}
+
 .collection-item {
   img {
     display: none;
