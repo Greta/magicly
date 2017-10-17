@@ -2,19 +2,89 @@ import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
 import {Collection, CollectionItem} from 'react-materialize';
 const _ = require('lodash');
+const mtg = require('mtgsdk');
 
 class BrowseSets extends Component {
+  constructor() {
+    super()
+    this.state = {
+      sets: [],
+      currentCardList: [],
+      currentSet: false
+    }
+    this.saveCardList = this.saveCardList.bind(this)
+    this.getCards = this.getCards.bind(this)
+  }
+  componentWillMount() {
+    // Get list of all sets
+    mtg.set.where({ type: 'expansion' })
+      .then(sets => {
+        // Store the sets
+        sets.sort(function(a,b){
+          return new Date(b.releaseDate) - new Date(a.releaseDate)
+        })
+        this.setState({ sets })
+
+        // Get the current set if we're on a set page
+        const setCode = this.props.match.params.code
+        if (setCode) this.updateSet(setCode)
+      })
+  }
+  componentWillReceiveProps(nextProps) {
+    let setCode = nextProps.match.params.code
+    if (setCode) this.updateSet(setCode)
+  }
+  updateSet = (setCode) => {
+    // Get the set cards and update the state
+    this.getCards(setCode)
+    const currentSet = this.state.sets.find(function(set){
+      return set.code === setCode
+    })
+    this.setState({ currentSet })
+  }
+  saveCardList = (currentCardList, updateCache) => {
+    // Save card list to state,
+    // then update Main card cache
+    this.setState({currentCardList})
+    if (updateCache) this.props.saveCardsToCache(currentCardList, updateCache)
+  }
+  getCards = (setCode) => {
+    // Check if data is stored in Main
+    const cachedCards = this.props.getCachedCards(setCode)
+    if (cachedCards) {
+      this.setState({currentCardList: cachedCards})
+    } else {
+      // If not, clear the list and grab cards from the API
+      this.saveCardList([])
+      let cards = [], update, i = 0
+      mtg.card.all({ set: setCode })
+        .on('data', card => {
+          cards.push(card)
+          // Let's not re-render 100+ times
+          // Instead, render every 50 cards, or 500ms
+          if (i > 50) {
+            i = 0
+            this.saveCardList(cards)
+          } else {
+            // By ensuring this is called last,
+            // the Main cache will be sure to
+            // contain the full card list
+            clearTimeout(update)
+            update = setTimeout(function(){
+              this.saveCardList(cards, setCode)}.bind(this), 500)
+          }
+          i++
+        })
+    }
+  }
   render() {
     return (
       <div className='container'>
         <div className="set-list">
           <h1>List of Sets</h1>
-          <SetList {...this.props} />
+          <SetList sets={this.state.sets} />
         </div>
-        <div className="card-list">
-          <h1></h1>
-          <SetCardList {...this.props} />
-        </div>
+        <SetCardList {...this.props} cards={this.state.currentCardList} set={this.state.currentSet} />
       </div>
     )
   }
@@ -33,23 +103,10 @@ class SetList extends Component {
 }
 
 class SetCardList extends Component {
-  constructor(props) {
-    super()
-    this.state = {
-      cards: props.cards
-    }
-  }
-  componentWillMount() {
-    // If the card list is empty, send a call to fill it
-    if (!this.state.cards.length) this.props.updateCurrentSet(this.props.match.params.code)
-  }
-  componentWillReceiveProps(nextProps) {
-    this.setState({cards: nextProps.cards})
-  }
   render() {
-    if (!this.state.cards) return null
+    if (!this.props.cards) return null
     let props = this.props
-    var cardList = _.map(this.state.cards, function(card) {
+    var cardList = _.map(props.cards, function(card) {
       return (
         <CollectionItem key={card.id} onMouseEnter={props.onCardHover.bind(this, card)}>
           {card.name}
@@ -57,7 +114,10 @@ class SetCardList extends Component {
       )
     })
     return (
-      <Collection className='cardList'>{cardList}</Collection>
+      <div className="card-list">
+        <h1>{props.set.name}</h1>
+        <Collection className='cardList'>{cardList}</Collection>
+      </div>
     )
   }
 }
