@@ -12,4 +12,10 @@ const Deck = () => (
   </div>
 )
 
-export { Decks, Deck }
+const DeckEditor = () => (
+  <div className="deck-list">
+    This is the DeckEditor component
+  </div>
+)
+
+export { Decks, Deck, DeckEditor }

@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
 import {Collection, CollectionItem} from 'react-materialize';
+import {DeckEditor} from './Deck.js';
 const _ = require('lodash');
 const mtg = require('mtgsdk');
 
@@ -79,12 +80,12 @@ class BrowseSets extends Component {
   }
   render() {
     return (
-      <div className='container'>
+      <div className="browse-lists">
         <div className="set-list">
-          <h1>List of Sets</h1>
-          <SetList sets={this.state.sets} />
+          <SetList sets={this.state.sets} currentSet={this.state.currentSet} />
         </div>
         <SetCardList {...this.props} cards={this.state.currentCardList} set={this.state.currentSet} />
+        <DeckEditor />
       </div>
     )
   }
@@ -93,8 +94,14 @@ class BrowseSets extends Component {
 class SetList extends Component {
   render() {
     if (!this.props.sets) return <p>Loading...</p>
-    var setList = _.map(this.props.sets, function(set){
-      return <CollectionItem key={set.code}><Link to={'/set/' + set.code}>{set.name}</Link></CollectionItem>
+    const props = this.props
+    var setList = _.map(props.sets, function(set){
+      const extraProps = props.currentSet && props.currentSet.code == set.code ? {className: 'active'} : {}
+      return (
+        <CollectionItem key={set.code} {...extraProps}>
+          <Link to={'/set/' + set.code}>{set.name}</Link>
+        </CollectionItem>
+      )
     })
     return (
       <Collection>{setList}</Collection>
@@ -115,8 +122,7 @@ class SetCardList extends Component {
     })
     return (
       <div className="card-list">
-        <h1>{props.set.name}</h1>
-        <Collection className='cardList'>{cardList}</Collection>
+        <Collection>{cardList}</Collection>
       </div>
     )
   }

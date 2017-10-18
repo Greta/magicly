@@ -1,17 +1,38 @@
+$pink: #DA6482;
+$text: #9D929B;
+$dark: #333;
+$darker: #222;
+
+body {
+  background-color: $dark;
+  color: $text;
+  a {
+    color: $pink;
+  }
+}
+
 header {
-  background-color: #222;
-  height: 150px;
+  background-color: $darker;
+  height: 100px;
   padding: 20px;
   color: white;
   img {
     animation: App-logo-spin infinite 20s linear;
-    height: 80px;
+    height: 50px;
+  }
+  h2 {
+    font-size: 2.56rem
   }
 }
 
 @keyframes App-logo-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
+}
+
+nav.row {
+  background-color: $pink;
+  margin-bottom: 0;
 }
 
 #currentCard {
@@ -21,16 +42,40 @@ header {
   z-index: 100;
 }
 
-.container {
-  .set-list, .card-list {
-    display: inline-block;
-    width: 50%;
-    vertical-align: top;
+.set-list, .card-list, .deck-list {
+  display: inline-block;
+  width: 33%;
+  vertical-align: top;
+  height: 100%;
+  overflow-y: scroll;
+  &::-webkit-scrollbar {
+    display: none;
   }
+  .collection {
+    margin: 0;
+    border: 0;
+    border-radius: 0;
+    .collection-item {
+      background: none;
+      border-bottom-color: $darker;
+      &.active {
+        background-color: $darker;
+      }
+    }
+  }
+}
+
+.set-list {
+  width: 300px;
+  background: darken($dark, 2%);
 }
 
 .collection-item {
   img {
     display: none;
   }
+}
+
+footer {
+  background-color: $pink !important;
 }

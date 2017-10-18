@@ -22,7 +22,7 @@ class Main extends Component {
     this.cardCache[setCode] = cards
   }
   onCardHover = (currentCard) => {
-    // this.setState({currentCard})
+    //this.setState({currentCard})
   }
   render() {
     const extraProps = {
