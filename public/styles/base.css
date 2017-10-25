@@ -1,8 +1,8 @@
-body {
-  background-color: #333;
-  color: #9D929B; }
-  body a {
-    color: #DA6482; }
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg); }
+  to {
+    transform: rotate(360deg); } }
 
 header {
   background-color: #222;
@@ -15,11 +15,11 @@ header {
   header h2 {
     font-size: 2.56rem; }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg); }
-  to {
-    transform: rotate(360deg); } }
+body {
+  background-color: #333;
+  color: #9D929B; }
+  body a {
+    color: #DA6482; }
 
 nav.row {
   background-color: #DA6482;
@@ -45,16 +45,53 @@ nav.row {
     border-radius: 0; }
     .set-list .collection .collection-item, .card-list .collection .collection-item, .deck-list .collection .collection-item {
       background: none;
-      border-bottom-color: #222; }
-      .set-list .collection .collection-item.active, .card-list .collection .collection-item.active, .deck-list .collection .collection-item.active {
-        background-color: #222; }
+      border-bottom-color: #222;
+      position: relative;
+      transition: background-color .1s;
+      cursor: pointer; }
+      .set-list .collection .collection-item.active, .set-list .collection .collection-item:hover, .card-list .collection .collection-item.active, .card-list .collection .collection-item:hover, .deck-list .collection .collection-item.active, .deck-list .collection .collection-item:hover {
+        background-color: rgba(0, 0, 0, 0.2); }
 
 .set-list {
   width: 300px;
+  background: #292929; }
+  .set-list .collection-item {
+    padding: 0; }
+  .set-list a {
+    display: block;
+    padding: 10px 20px; }
+
+.card-list {
   background: #2e2e2e; }
 
-.collection-item img {
-  display: none; }
-
-footer {
-  background-color: #DA6482 !important; }
+.deck-list {
+  padding: 10px 20px; }
+  .deck-list .cols {
+    -webkit-column-break-inside: avoid;
+    break-inside: avoid;
+    page-break-inside: avoid; }
+    .deck-list .cols.c2 {
+      -moz-column-count: 2;
+      -webkit-column-count: 2;
+      column-count: 2;
+      -moz-column-gap: 1em;
+      -webkit-column-gap: 1em;
+      column-gap: 1em; }
+    .deck-list .cols.c3 {
+      -moz-column-count: 3;
+      -webkit-column-count: 3;
+      column-count: 3;
+      -moz-column-gap: 1em;
+      -webkit-column-gap: 1em;
+      column-gap: 1em; }
+    .deck-list .cols > * {
+      -webkit-column-break-inside: avoid;
+      break-inside: avoid;
+      page-break-inside: avoid;
+      display: inline-block; }
+    .deck-list .cols li {
+      position: relative;
+      margin-left: 20px; }
+      .deck-list .cols li span {
+        position: absolute;
+        left: -20px; }

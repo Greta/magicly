@@ -1,6 +1,5 @@
 $(function(){
-  const navHeight = $('nav').outerHeight()
   $('.browse-lists').height(
-    window.innerHeight - ($('nav').outerHeight() + $('header').outerHeight())
+    window.innerHeight - ($('nav').outerHeight() + $('header').outerHeight() + 1)
   )
 })

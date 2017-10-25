@@ -3,12 +3,18 @@ $text: #9D929B;
 $dark: #333;
 $darker: #222;
 
-body {
-  background-color: $dark;
-  color: $text;
-  a {
-    color: $pink;
-  }
+@keyframes App-logo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@mixin cols($cols, $gutter: 1em) {
+  -moz-column-count: $cols;
+  -webkit-column-count: $cols;
+  column-count: $cols;
+  -moz-column-gap: $gutter;
+  -webkit-column-gap: $gutter;
+  column-gap: $gutter;
 }
 
 header {
@@ -25,9 +31,12 @@ header {
   }
 }
 
-@keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+body {
+  background-color: $dark;
+  color: $text;
+  a {
+    color: $pink;
+  }
 }
 
 nav.row {
@@ -58,8 +67,11 @@ nav.row {
     .collection-item {
       background: none;
       border-bottom-color: $darker;
-      &.active {
-        background-color: $darker;
+      position: relative;
+      transition: background-color .1s;
+      cursor: pointer;
+      &.active, &:hover {
+        background-color: rgba(0,0,0,0.2);
       }
     }
   }
@@ -67,15 +79,47 @@ nav.row {
 
 .set-list {
   width: 300px;
-  background: darken($dark, 2%);
-}
-
-.collection-item {
-  img {
-    display: none;
+  background: darken($dark, 4%);
+  .collection-item {
+    padding: 0;
+  }
+  a {
+    display: block;
+    padding: 10px 20px;
   }
 }
 
-footer {
-  background-color: $pink !important;
+.card-list {
+  background: darken($dark, 2%);
+}
+
+.deck-list {
+  padding: 10px 20px;
+  .cols {
+    -webkit-column-break-inside: avoid;
+    break-inside: avoid;
+    page-break-inside: avoid;
+
+    &.c2 {
+      @include cols(2);
+    }
+    &.c3 {
+      @include cols(3);
+    }
+    > * {
+      -webkit-column-break-inside: avoid;
+      break-inside: avoid;
+      page-break-inside: avoid;
+      display: inline-block;
+    }
+
+    li {
+      position: relative;
+      margin-left: 20px;
+      span {
+        position: absolute;
+        left: -20px;
+      }
+    }
+  }
 }
